@@ -1,0 +1,173 @@
+$def with(engine)
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Simple Model Railway Control Panel</title>
+	<link rel="stylesheet" href="/static/themes/base/jquery.ui.all.css">
+	<script src="/static/jquery-1.9.0.js"></script>
+	<script src="/static/ui/jquery-ui.js"></script>
+    <script src="/static/jquery.ui.touch-punch.min.js"></script>
+	<link rel="stylesheet" href="/static/control_panel.css">
+    
+	<script>
+
+    $$(document).ready(function() {
+    
+          var direction = "forward";
+          $$("#forward").css("background-color","#A9E2F3");
+          $$("#speed-value").text("0"); 
+          
+          function send(id,value) {
+              $$.post("/",
+              {
+                  id: id,
+                  value: value
+              },
+              function(data,status) {
+                    $$("#response_data").text(data);
+                    $$("#response_status").text(status); 
+              });    
+          };
+          
+
+          $$(function() {
+              $$("#speed").slider( {
+                  change: function(event, ui) {
+                     send(direction,ui.value); 
+                     $$("#speed-value").text(ui.value);     
+                  }
+                    
+              });
+          });
+              
+//          $$("button").click(function() {
+//            send(this.id,"London")
+//            
+//            $$(this).css("color","red");
+//            $$(this).css("background-color","blue");
+//            $$("#forward").css("background-color","green");
+//          });
+          
+          $$(".function").click(function() {
+              send(this.id,0);
+          });
+          
+           $$(".accessory").click(function() {
+              send(this.id,0);
+          });
+
+          $$("#forward").click(function() {
+            if (direction == "forward") {
+               $$("#forward").css("background-color","#A9E2F3");
+               $$("#reverse").css("background-color","#F2F2F2");
+            }
+            else {
+               $$("#forward").css("background-color","#A9E2F3");
+               $$("#reverse").css("background-color","#F2F2F2");
+               direction = "forward";
+               $$("#speed").slider({value:0});
+            } 
+          }); 
+          $$("#reverse").click(function() {
+            if (direction == "reverse") {
+               $$("#forward").css("background-color","#F2F2F2");
+               $$("#reverse").css("background-color","#A9E2F3");
+            }
+            else {
+               $$("#forward").css("background-color","#F2F2F2");
+               $$("#reverse").css("background-color","#A9E2F3");
+               direction = "reverse";
+               $$("#speed").slider({value:0});
+            } 
+          });
+          $$("#stop").click(function() {
+               $$("#speed").slider({value:0});
+          });
+    });                
+	</script>
+</head>
+<body>
+<h1> Simple Model Railway Control Panel </h1>
+<h2> $engine</h2>
+<table>
+<td>
+<table>
+<tr>
+<td>
+<button id = "forward" class = "throttle">Forward<img src="/static/forward.png"/></button>
+<td>
+<button id = "stop" class = "throttle"> Stop</button>
+<td>
+<button id = "reverse" class = "throttle" >Reverse<img src="/static/reverse.png"/></button>
+</tr>
+<tr>
+<td>
+<h1> Speed </h1>
+<td>
+<div id="speed-value" style="font-size:2em"></div>
+</tr>
+<tr>
+<td colspan=3>
+<div id="speed" class = "slider1"> </div>
+</tr>
+<tr>
+<td>
+<h1> Accessories</h1>
+</tr>
+<tr>
+<td>
+<button id = "a1-on" class = "accessory">Signal Go</button>
+<td>
+<button id = "a1-off"class = "accessory">Signal Stop</button>
+</tr>
+
+</table>
+<td>
+<table>
+<tr>
+<td>
+<button id = "f0-on" class = "function">Lights On</button>
+<td>
+<button id = "f0-off" class = "function">Lights Off</button>
+</tr>
+<tr>
+<td>
+<button id = "f1-on" class = "function">Sound On</button>
+<td>
+<button id = "f1-off" class = "function">Sound Off</button>
+</tr>
+<tr>
+<td>
+<button id = "f2" class = "function">Horn 1</button>
+<td>
+<button id = "f3" class = "function">Horn 2</button>
+</tr>
+<tr>
+<td>
+<button id = "f5" class = "function">Buzzer 2</button>
+<td>
+<button id = "f6" class = "function">Buzzer 1</button>
+</tr>
+<tr>
+<td>
+<button id = "f4" class = "function">Brake</button>
+<td>
+<button id = "f10" class = "function">Guards Whistle</button>
+</tr>
+</table>
+
+</table>
+
+<table>
+<tr>
+<td>
+Server response:
+<td>
+<div id="response_data"> </div>
+<td>
+<div id="response_status"> </div>
+</tr>
+</table>
+</body>
+</html>
