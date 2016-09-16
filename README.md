@@ -3,7 +3,7 @@ smrc
 
 Simple model railway control for the Raspberry Pi
 
-[Background notes](phwallen.github.io/smrc)
+[Background notes](https://phwallen.github.io/smrc)
 
 The project consists of the following python scripts:
 
